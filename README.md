@@ -1,11 +1,14 @@
 # pycrypt
 
 A CLI-based tool to en- and decrypt strings.
+
 Usage:
 
 ```
 $ python3 pycrypt.py [-d/-e] [filepath.txt] [-o] [filepath]
 ```
+
+
 
 Parameter | What it does
 --- | ---
