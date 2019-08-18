@@ -1,15 +1,13 @@
 import sys
-from os import path
+import os
 import math
+import platform
+
 import time
 import binascii
 import base64
 import binhex
-import hashlib
-import hmac
-import quopri
-import uu
-import xdrlib
+
 
 
 # console parameter check
@@ -25,11 +23,6 @@ import xdrlib
 #TODO: add algorithms in algorithm class (in that "SWITCH-CASE")
 #TODO: find out more dataencryptions
 '''
-Info:
-    brute forcing
-    key sizes
-    block sizes
-
 symmetric:
     info:
         same key
@@ -58,17 +51,6 @@ asymmetric:
 one way hash
     sha
 
-other:
-    transposition
-        order
-
-    substituition
-        replace
-
-    codebook
-
-    other mathematics
-
 '''
 
 # How to add a new algorithm:
@@ -89,10 +71,14 @@ hasOutput = False
 # in lower
 algoList = [
 "base64",
-"des"
+"base32",
+"base16"
 ]
 
-
+if platform.system() == "Windows":
+    os.system('cls')
+else:
+    os.system('clear')
 
 if len(sys.argv) >= 3:
     if sys.argv[1] == "-e":
@@ -101,7 +87,7 @@ if len(sys.argv) >= 3:
     elif sys.argv[1] == "-d":
         encrypt = False
 
-    if path.exists(sys.argv[2]):
+    if os.path.exists(sys.argv[2]):
         fileI = open(sys.argv[2], "r")
         input = fileI.readlines()[0]
         fileI.close()
@@ -120,24 +106,39 @@ class Algorithm:
     #type corresponds to algolist
     type = None
     def __init__(self, type):
-        this.type = type
+        self.type = type
 
-    decode(input):
-        output = "something"
-
+    def decode(self, x):
         # the "SWITCH-CASE" for algorithms
         # HERE. do something with output
-        if type == 1:
-            #base64
-            pass
-        if type == 2:
-            #des
-            pass
+        #base64
+        output = None
+        if self.type == 0:
+            output = base64.standard_b64decode(x)
+
+        #base32
+        if self.type == 1:
+            output = base64.b32decode(x)
+
+        #base16
+        if self.type == 2:
+            output = base64.b16decode(x)
 
         return output
 
-    encode(input):
-        output = "something"
+    def encode(self, x):
+        output = None
+        if self.type == 0:
+            output = base64.standard_b64encode(x)
+
+        #base32
+        if self.type == 1:
+            output = base64.b32encode(x)
+
+        #base16
+        if self.type == 2:
+            output = base64.b16encode(x)
+
         return output
 
 print("pycrypt " + version + " by yungcxn")
@@ -145,30 +146,55 @@ print("pycrypt " + version + " by yungcxn")
 print("Choose a " + ("Encryption" if encrypt else "Decryption")
     + " Algorithm by typing the corresponding number of the following list:")
 
-#Do something with algoList to print it beautified
+#temps to indicate i=index , longest=number of "="
 i = 0
+longest = 0
+
+#separator
+print("\n")
+
+#calc for topline
 for item in algoList:
-    print(item + " : " + i)
+    toPrint = str(i) + " :: " + item
+    if len(toPrint) > longest:
+        longest = len(toPrint)
     i+=1
 
+#topline
+print("('x' to exit)")
+print(longest * "=")
 
+#reset
+i = 0
+
+#print and bottomline
+for item in algoList:
+    toPrint = str(i) + " :: " + item
+    print(toPrint)
+    i+=1
+
+#bottomline
+print(longest * "=")
+
+
+#indicate algorithm instance
 OurAlgo = None
+#to continue if wrong usage, else break
 while(True):
-    indexNumber = input("")
+    indexNumber = raw_input("")
+    if(indexNumber == "x"):
+        exit()
     indexIsNumber = indexNumber.isdigit()
     if indexIsNumber == False:
         print("Wrong Usage! Retry")
 
-    elif int(indexNumber) < 0 && int(indexNumber) > len(algoList):
+    elif int(indexNumber) < 0 and int(indexNumber) > len(algoList):
         print("Wrong Usage! Retry")
 
     else:
         OurAlgo = Algorithm(int(indexNumber))
         print("You've chosen: " + algoList[int(indexNumber)])
         break
-
-
-print("Please wait...")
 
 if encrypt:
     output = OurAlgo.encode(input)
