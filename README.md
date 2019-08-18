@@ -25,10 +25,9 @@ After that you will be asked which algorithm to choose of.
 
 ### Requirements  
 
-
 You need to have Python at least at version `3.4`.  
-
 The newest Python3 version is highly recommended.  
+
 
 
 These are the already implemented algorithms:  
