@@ -22,6 +22,8 @@ import binhex
 
 #TODO: add algorithms in algorithm class (in that "SWITCH-CASE")
 #TODO: find out more dataencryptions
+#TODO: work on ascii image manipulation
+
 '''
 symmetric:
     info:
@@ -73,6 +75,7 @@ algoList = [
 "base64",
 "base32",
 "base16"
+"ascii image manipulation"
 ]
 
 if platform.system() == "Windows":
@@ -137,6 +140,12 @@ class Algorithm:
 
         #base16
         if self.type == 2:
+            output = base64.b16encode(x)
+
+        #ascii image manipulation
+        if self.type == 3:
+            #take in one png
+            #8 byte header
             output = base64.b16encode(x)
 
         return output
