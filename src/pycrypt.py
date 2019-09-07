@@ -2,6 +2,9 @@ import sys
 import os
 import math
 import platform
+import io
+import Image
+from array import array
 
 import time
 import binascii
@@ -103,6 +106,12 @@ if len(sys.argv) >= 3:
         if sys.argv[3] == "-o":
             hasOutput = True
 
+def readimage(path):
+    count = os.stat(path).st_size / 2
+    with open(path, "rb") as f:
+        return bytearray(f.read())
+
+
 
 #class that has different decode() and encode() on "type" in init
 class Algorithm:
@@ -127,6 +136,26 @@ class Algorithm:
         if self.type == 2:
             output = base64.b16decode(x)
 
+        #ascii image manipulation
+        if self.type == 3:
+
+            '''
+            with open("img.png", "rb") as image:
+              f = image.read()
+              b = bytearray(f)
+              print b[0]
+            '''
+            org_imgpath =
+                raw_input("Type in the filepath to the original image: ")
+            new_imgpath =
+                raw_input("Type in the filepath to the manipulated image: ")
+            org_img_hex = readimage(org_imgpath)
+            new_img_hex = readimage(new_imgpath)
+            #subtract for every value in new the value in org and append it
+            #to new array. then read array and solve encryption
+            #output is this solve of the array
+            output = "test"
+
         return output
 
     def encode(self, x):
@@ -146,7 +175,14 @@ class Algorithm:
         if self.type == 3:
             #take in one png
             #8 byte header
-            output = base64.b16encode(x)
+            imgpath = raw_input("Type in the filepath to the image: ")
+            savepath = raw_input("Type in the output destination: ")
+            img_hex = readimage(imgpath)
+            #do something with img_hex, manipulate it
+            img = Image.open(io.BytesIO(img_hex))
+            img.save(savepath)
+            print("The manipulated image has been saved!")
+            return
 
         return output
 
